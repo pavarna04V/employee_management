@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employees</title>
+</head>
+
+<body>
+
+<h1>Employees</h1>
+
+<a href="/dashboard/">Dashboard</a>
+
+<br><br>
+
+<a href="/add-employee/">Add Employee</a>
+
+<br><br>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Salary</th>
+    <th>Department</th>
+    <th>Action</th>
+</tr>
+
+{% for emp in employees %}
+
+<tr>
+
+<td>{{ emp.first_name }} {{ emp.last_name }}</td>
+
+<td>{{ emp.email }}</td>
+
+<td>{{ emp.salary }}</td>
+
+<td>{{ emp.department.name }}</td>
+
+<td>
+
+<a href="/delete-employee/{{ emp.id }}/">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

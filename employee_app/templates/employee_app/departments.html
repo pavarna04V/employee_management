@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Departments</title>
+</head>
+
+<body>
+
+<h1>Departments</h1>
+
+<a href="/dashboard/">Dashboard</a>
+
+<br><br>
+
+<a href="/add-department/">Add Department</a>
+
+<br><br>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>Name</th>
+    <th>Location</th>
+</tr>
+
+{% for dep in departments %}
+
+<tr>
+
+<td>{{ dep.name }}</td>
+
+<td>{{ dep.location }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

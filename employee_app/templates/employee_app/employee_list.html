@@ -1,0 +1,37 @@
+{% extends 'employee_app/base.html' %}
+
+{% block content %}
+
+<h2>Employees</h2>
+
+<a href="{% url 'add_employee' %}">
+    Add Employee
+</a>
+
+<table border="1" cellpadding="10">
+
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Department</th>
+        <th>Salary</th>
+    </tr>
+
+    {% for employee in employees %}
+
+    <tr>
+        <td>{{ employee.id }}</td>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.email }}</td>
+        <td>{{ employee.phone }}</td>
+        <td>{{ employee.department.name }}</td>
+        <td>{{ employee.salary }}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}
