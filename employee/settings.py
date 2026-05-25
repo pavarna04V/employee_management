@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'django_filters',
     'employee_app',
 ]
 
@@ -152,4 +154,4 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = 'pavarna04@gmail.com'
 
-EMAIL_HOST_PASSWORD = 'duff hbur crho xbri'
+EMAIL_HOST_PASSWORD = 'duffhburcrhoxbri'

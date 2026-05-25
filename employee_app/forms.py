@@ -1,5 +1,5 @@
 from django import forms
-from .models import Employee
+from .models import Employee, Department
 
 
 class EmployeeForm(forms.ModelForm):
@@ -29,5 +29,27 @@ class EmployeeForm(forms.ModelForm):
 
             'department': forms.Select(attrs={
                 'class': 'form-select'
+            }),
+        }
+        
+class DepartmentForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Department
+
+        fields = [
+            'name',
+            'location'
+        ]
+
+        widgets = {
+
+            'name': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'location': forms.TextInput(attrs={
+                'class': 'form-control'
             }),
         }

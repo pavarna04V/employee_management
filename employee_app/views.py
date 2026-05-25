@@ -2,12 +2,40 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import Employee, Department
-
+from django.contrib.auth.models import User
+from .forms import DepartmentForm
 
 # HOME PAGE
 def home(request):
     return render(request, 'employee_app/home.html')
 
+# REGISTER
+def register_view(request):
+
+    if request.method == 'POST':
+
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists')
+            return redirect('register')
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        # auto login after register
+        login(request, user)
+
+        messages.success(request, 'Registration successful')
+
+        return redirect('dashboard')
+
+    return render(request, 'employee_app/register.html')
 
 # LOGIN
 def login_view(request):
@@ -56,8 +84,90 @@ def dashboard(request):
         context
     )
 
+# DEPARTMENTS
+def departments(request):
 
+    departments = Department.objects.all()
+
+    context = {
+        'departments': departments
+    }
+
+    return render(
+        request,
+        'employee_app/departments.html',
+        context
+    )
+    
+# ADD DEPARTMENT
+def add_department(request):
+
+    form = DepartmentForm()
+
+    if request.method == 'POST':
+
+        form = DepartmentForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                'Department added successfully'
+            )
+
+            return redirect('departments')
+
+    context = {
+        'form': form
+    }
+
+    return render(
+        request,
+        'employee_app/add_department.html',
+        context
+    )
 # ADD EMPLOYEE
+# def add_employee(request):
+
+#     departments = Department.objects.all()
+
+#     if request.method == 'POST':
+
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         phone = request.POST.get('phone')
+#         salary = request.POST.get('salary')
+#         department_id = request.POST.get('department')
+
+#         department = Department.objects.get(id=department_id)
+
+#         Employee.objects.create(
+#             name=name,
+#             email=email,
+#             phone=phone,
+#             salary=salary,
+#             department=department
+#         )
+
+#         messages.success(request, 'Employee added successfully')
+
+#         return redirect('employee_list')
+
+#     context = {
+#         'departments': departments
+#     }
+
+#     return render(
+#         request,
+#         'employee_app/add_employee.html',
+#         context
+#     )
+
+from django.core.mail import send_mail
+from django.conf import settings
+
 def add_employee(request):
 
     departments = Department.objects.all()
@@ -72,7 +182,7 @@ def add_employee(request):
 
         department = Department.objects.get(id=department_id)
 
-        Employee.objects.create(
+        employee = Employee.objects.create(
             name=name,
             email=email,
             phone=phone,
@@ -80,19 +190,34 @@ def add_employee(request):
             department=department
         )
 
-        messages.success(request, 'Employee added successfully')
+        # 📧 SMTP EMAIL SEND
+        send_mail(
+            subject="Welcome to Company 🎉",
+            message=f"""
+Hi {employee.name},
+
+Your employee account has been created successfully.
+
+Department: {employee.department.name}
+Salary: {employee.salary}
+
+Welcome to the team!
+
+Regards,
+HR Team
+""",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[employee.email],
+            fail_silently=False,
+        )
+
+        messages.success(request, "Employee added successfully & Email sent")
 
         return redirect('employee_list')
 
-    context = {
+    return render(request, 'employee_app/add_employee.html', {
         'departments': departments
-    }
-
-    return render(
-        request,
-        'employee_app/add_employee.html',
-        context
-    )
+    })
 
 
 # EMPLOYEE LIST

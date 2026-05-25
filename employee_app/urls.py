@@ -9,6 +9,11 @@ urlpatterns = [
         views.home,
         name='home'
     ),
+    path(
+        'register/',
+        views.register_view,
+        name='register'
+    ),
 
     # LOGIN
     path(
@@ -30,6 +35,19 @@ urlpatterns = [
         views.dashboard,
         name='dashboard'
     ),
+    
+    # DEPARTMENTS
+    path(
+        'departments/',
+        views.departments,
+        name='departments'
+    ),
+    
+    path(
+            'add-department/',
+            views.add_department,
+            name='add_department'
+        ),
 
     # ADD EMPLOYEE
     path(
